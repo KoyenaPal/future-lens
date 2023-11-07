@@ -109,7 +109,7 @@ def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 
          ]
     layer_logits = [
              # first column
-             # [[show.style(fontWeight='bold', width='50px'), f'L{layer}']] +
+             [[show.style(fontWeight='bold', width='50px'), f'L{layer}']] +
              [
                  # subsequent columns
                  [color_fn(p[0], fprobs), hover(tok, p, t), show.style(overflowX='hide'), f"{decode_escape(tok, t[0])}{''.join(decode_escape(tok, ft, False))}"]
@@ -118,4 +118,4 @@ def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 
         for layer, wordprobs, words, future_words, future_probs in
                 zip(range(len(favorite_probs[:, 0])), favorite_probs[:, 0], favorite_tokens[:,0], future_outputs, future_preds)]
     
-    show(layer_logits)
+    show(header_line + layer_logits + header_line)
