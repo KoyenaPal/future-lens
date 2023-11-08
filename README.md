@@ -15,7 +15,7 @@ To run the linear modoel approximation, you may run the following command:
 ```
 python linear_methods/linear_hs.py
 ```
-See (linear_methods/linear_hs.py)[linear_methods/linear_hs.py] for more parameter choices.
+See [linear_methods/linear_hs.py](linear_methods/linear_hs.py) for more parameter choices.
 
 ## Causal Method
 TBD
