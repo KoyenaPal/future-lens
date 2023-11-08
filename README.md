@@ -5,6 +5,12 @@ Code and Data Repo for the CoNLL 2023 Paper -- Future Lens: Anticipating Subsequ
 
 In this repo, we include two distinctive way to reveal the extent to which individual hidden states may directly encode subsequent tokens: 1) **Linear Approximation Methods** and 2) **Causal Intervention Methods**. With the best result, we propose **Future Lens** as the tool to extract information about future (beyond subsequent) tokens from a single hidden token representation.
 
+## Set-up
+Run the following code to install the environment
+```
+pip install -r scripts/colab_reqs.txt
+```
+
 ## Linear Method
 TBD
 
