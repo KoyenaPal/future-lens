@@ -15,14 +15,15 @@ To run the linear modoel approximation, you may run the following command:
 ```
 python linear_methods/linear_hs.py
 ```
-See the [code](linear_methods/linear_hs.py) for more parameter choices.
 
 ## Causal Method
 TBD
 
 ## Future Lens
-TBD
-
+We provide an online [demo](https://colab.research.google.com/github/KoyenaPal/future-lens/blob/main/demo/FutureLensDemonstration.ipynb) notebook for the Future Lens. You may also run the code locally from 
+```
+demo/FutureLensDemonstration.ipynb
+```
 ## Updates
 
 ### Oct.6th 2023
