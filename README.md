@@ -3,16 +3,19 @@ Code and Data Repo for the CoNLL 2023 Paper -- Future Lens: Anticipating Subsequ
 
 ![alt text](img/main.png "Main Fig")
 
-In this repo, we include two distinctive way to reveal the extent to which individual hidden states may directly encode subsequent tokens: 1) **Linear Approximation Methods** and 2) **Causal Intervention Methods**. With the best result, we propose **Future Lens** as the tool to extract information about future (beyond subsequent) tokens from a single hidden token representation.
+In this repo, we include two distinctive way to reveal the extent to which individual hidden states may directly encode subsequent tokens: 1) **Linear Model Approximation** and 2) **Causal Intervention Methods**. With the best result, we propose **Future Lens** as the tool to extract information about future (beyond subsequent) tokens from a single hidden token representation.
 
 ## Set-up
 Run the following code to install the environment
 ```
 pip install -r scripts/colab_reqs.txt
 ```
-
-## Linear Method
-TBD
+## Linear Model Approximation
+To run the linear modoel approximation, you may run the following command:
+```
+python linear_methods/linear_hs.py
+```
+See (linear_methods/linear_hs.py)[linear_methods/linear_hs.py] for more parameter choices.
 
 ## Causal Method
 TBD
