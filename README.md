@@ -3,7 +3,7 @@ Code and Data Repo for the CoNLL 2023 Paper -- Future Lens: Anticipating Subsequ
 
 ![alt text](img/main.png "Main Fig")
 
-In this repo, we include two distinctive way to reveal the extent to which individual hidden states may directly encode subsequent tokens: 1) Linear Approximation Methods and 2) Causal Intervention Methods.
+In this repo, we include two distinctive way to reveal the extent to which individual hidden states may directly encode subsequent tokens: 1) **Linear Approximation Methods** and 2) **Causal Intervention Methods**.
 
 ## Linear Method
 TBD
