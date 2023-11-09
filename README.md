@@ -17,8 +17,14 @@ python linear_methods/linear_hs.py
 ```
 
 ## Causal Method
-TBD
-
+To train a soft prompt for GPT-J, you may run the following command:
+```
+python causal_methods/train.py
+```
+And then test by running the following script:
+```
+python causal_methods/test.py
+```
 ## Future Lens
 We provide an online [demo](https://colab.research.google.com/github/KoyenaPal/future-lens/blob/main/demo/FutureLensDemonstration.ipynb) notebook for the Future Lens. You may also run the code locally from 
 ```
@@ -30,5 +36,8 @@ demo/FutureLensDemonstration.ipynb
 Our paper is accepted by CoNLL 2023!
 
 ### Nov.8th 2023
-We release the code and preprint version of the paper!
+We release the code and preprint version of the paper! 
 
+
+## Contact
+If any questions about the code, please contact Koyena at pal.k@northeastern.edu.
