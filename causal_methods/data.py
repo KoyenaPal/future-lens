@@ -21,7 +21,6 @@ def load_dataset(data_path: str, max_examples=None):
     df = df.astype({'decoded_prefix':'string', 'teacher_phrase':'string'})
     prefixes = df['decoded_prefix'].to_list()
     phrases = df['teacher_phrase'].to_list()
-    print("PHRASES LIST SIZE", len(phrases))
     assert len(prefixes) == len(phrases)
     dataset = Dataset.from_dict({
         'prefix': prefixes,

@@ -5,7 +5,7 @@ from pytorch_lightning import Trainer, seed_everything
 from transformers import AutoTokenizer
 from customized import CustomizedGPTJForCausalLM
 from data import SoftPromptDataModule
-from module_updated import GPTJModule
+from module import GPTJModule
 from pytorch_lightning.loggers import TensorBoardLogger
 import json
 
@@ -50,7 +50,6 @@ def train(args):
         batch_size=args.batch_size,
         prefix_length=args.prefix_length, 
         in_layer = args.in_layer,
-        tgt_in_layer = args.tgt_in_layer,
         out_layer = args.out_layer,
         next_token_skip = args.next_token_skip,
         lr=args.lr,
@@ -79,15 +78,14 @@ def main():
     parser = argparse.ArgumentParser()
     # Directories
     parser.add_argument('--model_name_or_path', default="EleutherAI/gpt-j-6b")
-    parser.add_argument('--output_path', default=None, type=str)
-    parser.add_argument('--train_set', default="./data/training_data_teacher_100000.csv")
-    parser.add_argument('--training_examples', default=100000, type=int)
+    parser.add_argument('--output_path', default="./results/temp", type=str)
+    parser.add_argument('--train_set', default="./data/training_data_teacher_11000.csv")
+    parser.add_argument('--training_examples', default=10000, type=int)
 
     # Experiment Set-ups
     parser.add_argument('--prefix_length', default=10, type=int, choices=[10, 30])
     parser.add_argument('--next_token_skip', default=[2, 3], type=int, nargs="+") # 0 for the currently predicted token, 1 for the next ...
-    parser.add_argument('--in_layer', default=14, type=int)
-    parser.add_argument('--tgt_in_layer', default=7, type=int)
+    parser.add_argument('--in_layer', default="Emb", choices=[*range(28), "Emb"])
     parser.add_argument('--out_layer', default=27, type=int)
 
     # Hyperparameters
@@ -105,7 +103,7 @@ def main():
 
     if args.output_path is None:
         tk = "".join([str(i) for i in args.next_token_skip])
-        args.output_path = "./results/training/layer{}to{}_tk{}".format(args.in_layer, args.tgt_in_layer, tk)
+        args.output_path = "./results/training/layer{}to{}_tk{}".format(args.in_layer, args.out_layer, tk)
 
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path, exist_ok=True)

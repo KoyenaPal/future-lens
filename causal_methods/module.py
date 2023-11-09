@@ -102,6 +102,7 @@ class GPTJModule(pl.LightningModule):
                 pred_logits = outputs.logits[:, -1, :] # Batch, Vocab dim unchanged, takes the last token logits
                 pred_probs = torch.softmax(pred_logits, dim=-1)
                 pred_top_k = torch.topk(pred_probs, top_k, dim=-1).indices
+
                 next_token = labels[:, i].unsqueeze(1)
                 if input_ids is None:
                     input_ids = next_token
