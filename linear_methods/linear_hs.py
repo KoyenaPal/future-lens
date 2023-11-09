@@ -423,8 +423,8 @@ def main(args):
         project = args["project_name"],
         name = display_name,
         config = args)
-    training_data = pd.read_csv("../data/all_pile_sample/training_data_100000.csv")
-    testing_data = pd.read_csv("../data/all_pile_sample/testing_data_1000.csv")
+    training_data = pd.read_csv("../data/training_data_100000.csv")
+    testing_data = pd.read_csv("../data/testing_data_1000.csv")
 
     # Loading data cache if available
     train_npy_dir = "../data/train_data_cache/"
@@ -467,6 +467,7 @@ def main(args):
     test_loss, acc, gt_acc = test(args, models[0], device, test_loader)
     train_loader = DataLoader(dataset=train_data, batch_size = batch_size, collate_fn = dataset_collate_func, drop_last=True)
 
+    # Hard coded optimizer value here
     optimizer = torch.optim.SGD(models[0].parameters(), lr=learning_rate*(1-0.9), momentum=0.9, nesterov=True, weight_decay=weight_decay)
 
     scheduler = ReduceLROnPlateau(optimizer, mode='min', patience=3)
@@ -510,9 +511,9 @@ if __name__ == '__main__':
                         help='learning rate for training')
     parser.add_argument('--fine_tune_epochs', type=int, default=3,
                         help='epochs to fine tune')
-    parser.add_argument('--experiment_data_dir', type=str, default= "../linear-models-gpt-j",
+    parser.add_argument('--experiment_data_dir', type=str, default= "../linear-models-gpt-j-TESTER",
                         help='For saving output checkpoints')
-    parser.add_argument('--project_name', type=str, default= "linear-model-gpt-j",
+    parser.add_argument('--project_name', type=str, default= "linear-model-gpt-j-TESTER",
                         help='For saving output checkpoints')
     parser.add_argument('--log_interval', type=int, default=100, metavar='N',
                         help='how many batches to wait before logging training status')
