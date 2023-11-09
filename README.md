@@ -8,7 +8,7 @@ In this repo, we include two distinctive way to reveal the extent to which indiv
 ## Set-up
 Run the following code to install relevant packages to your virtual environment
 ```
-pip install -r scripts/colab_reqs/future-env.txt
+pip install -r scripts/colab-reqs/future-env.txt
 ```
 ## Linear Model Approximation
 To run the linear modoel approximation, you may run the following command:
