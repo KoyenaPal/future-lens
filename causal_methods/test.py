@@ -88,7 +88,7 @@ def main():
     parser.add_argument('--model_name_or_path', default="EleutherAI/gpt-j-6b")
     parser.add_argument('--prefix_path', default=None)
     parser.add_argument('--output_path', default=None)
-    parser.add_argument('--test_set', default="./data/testing_data_teacher_1000.csv")
+    parser.add_argument('--test_set', default="../data/testing_data_teacher_1000.csv")
 
     # Model Set-ups
     parser.add_argument('--precision', default="bf16", choices=["fp32", "fp16", "bf16"])
@@ -101,7 +101,7 @@ def main():
     parser.add_argument('--context_idx', default=0, type=int, choices=[0, 1, 2, 3])
     parser.add_argument('--prefix_length', default=10, type=int, choices=[10, 30])
     parser.add_argument('--next_token_skip', default=[1], type=int, nargs="+") # 0 for the next token prediction
-    parser.add_argument('--in_layer', default=7, type=int)
+    parser.add_argument('--in_layer', default=13, type=int)
     parser.add_argument('--out_layer', default=27, type=int)
 
     parser.add_argument('--max_n', default=4, type=int)
@@ -114,7 +114,7 @@ def main():
 
     tk_list = "".join([str(i) for i in args.next_token_skip])
     if args.prefix_path is None:
-        args.prefix_path = "./results/training/layer{}to{}_tk{}/soft_prefix.pt".format(args.in_layer, args.out_layer, tk_list)
+        args.prefix_path = "./results/layer{}to{}_tk{}/soft_prefix.pt".format(args.in_layer, args.out_layer, tk_list)
     
     if args.output_path is None:
         print(not args.text_prefix)

@@ -79,13 +79,13 @@ def main():
     # Directories
     parser.add_argument('--model_name_or_path', default="EleutherAI/gpt-j-6b")
     parser.add_argument('--output_path', default="./results/temp", type=str)
-    parser.add_argument('--train_set', default="./data/training_data_teacher_11000.csv")
+    parser.add_argument('--train_set', default="../data/training_data_teacher_11000.csv")
     parser.add_argument('--training_examples', default=10000, type=int)
 
     # Experiment Set-ups
     parser.add_argument('--prefix_length', default=10, type=int, choices=[10, 30])
     parser.add_argument('--next_token_skip', default=[2, 3], type=int, nargs="+") # 0 for the currently predicted token, 1 for the next ...
-    parser.add_argument('--in_layer', default="Emb", choices=[*range(28), "Emb"])
+    parser.add_argument('--in_layer', default=13, type=int)
     parser.add_argument('--out_layer', default=27, type=int)
 
     # Hyperparameters
