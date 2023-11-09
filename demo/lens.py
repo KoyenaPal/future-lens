@@ -85,10 +85,21 @@ def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 
         return show.style(background=f'rgb({a[0]}, {a[1]}, {a[2]})')
 
     # In the hover popup, show topk probabilities beyond the 0th.
-    def hover(tok, prob, toks):
-        lines = []
-        for p, t in zip(prob, toks):
-            lines.append(f'{tok.decode(t)}: prob {p:.2f}')
+    def hover(tok, prob, toks, fprobs, ftokens):
+        total_probs = prob[0] + sum(fprobs)
+        new_p = total_probs / (len(fprobs) + 1)
+        curr_pred = tok.decode(toks[0]).encode("unicode_escape").decode()
+        lines = [f"Average Probability: {new_p}"]
+        additional_text = ""
+        for curr_fprob, curr_ftoken in zip(fprobs, ftokens):
+            curr_ftoken = curr_ftoken.encode("unicode_escape").decode()
+            additional_text += f"\n{curr_ftoken}: prob {curr_fprob:.2f}"
+        lines.append(f'{curr_pred}: prob {prob[0]:.2f}{additional_text}')
+        
+        # Commented out code -- add top k token predictions in hover
+        # for p, t in zip(prob, toks):
+        #     lines.append(f'{tok.decode(t)}: prob {p:.2f}')
+        
         return show.attr(title='\n'.join(lines))
 
     def decode_escape(tok,token,actual_decode=True):
@@ -112,7 +123,7 @@ def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 
              [[show.style(fontWeight='bold', width='50px'), f'L{layer}']] +
              [
                  # subsequent columns
-                 [color_fn(p[0], fprobs), hover(tok, p, t), show.style(overflowX='hide'), f"{decode_escape(tok, t[0])}{''.join(decode_escape(tok, ft, False))}"]
+                 [color_fn(p[0], fprobs), hover(tok, p, t, fprobs, ft), show.style(overflowX='hide'), f"{decode_escape(tok, t[0])}{''.join(decode_escape(tok, ft, False))}"]
                  for p, t, ft, fprobs in zip(wordprobs, words, future_words, future_probs)
              ]
         for layer, wordprobs, words, future_words, future_probs in
