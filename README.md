@@ -25,6 +25,8 @@ And then test by running the following script:
 ```
 python causal_methods/test.py
 ```
+Note: To load the default training set, you can access the file with [this link](https://baulab.us/u/koyena/data/future-lens/training_data_teacher_100000.csv).
+
 ## Future Lens
 We provide an online [demo](https://colab.research.google.com/github/KoyenaPal/future-lens/blob/main/demo/FutureLensDemonstration.ipynb) notebook for the Future Lens. You may also run the code locally from 
 ```

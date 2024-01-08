@@ -13,7 +13,7 @@ def load_prefix(path):
     prefix_vector = torch.load(path)
     return prefix_vector.to(torch.float32)
 
-def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 13, topk = 5, num_toks_gen=4, context_pos = 9, color=None):
+def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 13, topk = 5, num_toks_gen=4, context_pos = 9, color=None, remote=True):
     from baukit import show
 
     prefix_pos = len(tok(prefix)['input_ids']) - 1
@@ -21,7 +21,7 @@ def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 
     context = context.detach()
     num_layers = len(model.transformer.h)
 
-    with model.generate(max_new_tokens=num_toks_gen, pad_token_id=50256) as generator:
+    with model.generate(max_new_tokens=num_toks_gen, pad_token_id=50256, remote=remote) as generator:
         with generator.invoke(prefix) as invoker:
             transplant_hs = model.transformer.h[in_layer].output[0].t[prefix_pos].save()
             overall_hs = []
@@ -44,9 +44,9 @@ def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 
         curr_future_preds = []
         for x in range(0, curr_hs.shape[1]):
             sub_hs = curr_hs[:,x,:][None,:]
-            with model.generate(max_new_tokens=num_toks_gen, pad_token_id=50256) as generator2:
+            with model.generate(max_new_tokens=num_toks_gen, pad_token_id=50256, remote=remote) as generator2:
                 with generator2.invoke("_ _ _ _ _ _ _ _ _ _") as invoker:
-                    model.transformer.wte.output = context
+                    model.transformer.wte.output = context[None,:]
                     model.transformer.h[tgt_in_layer].output[0].t[context_pos] = sub_hs
                     invoker.next()
                     future_output_logits = model.lm_head.output.save()
