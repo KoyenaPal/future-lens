@@ -20,46 +20,54 @@ def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 
     
     context = context.detach()
     num_layers = len(model.transformer.h)
-    overall_hs = []
-    init_logits = []
     # with model.generate(max_new_tokens=num_toks_gen, pad_token_id=50256, remote=remote) as generator:
     with model.trace(max_new_tokens=num_toks_gen, pad_token_id=50256, remote=remote) as tracer:
+        overall_hs = list().save()
+        init_logits = list().save()
         with tracer.invoke(prefix) as invoker:
             for i in range(num_layers):
                 init_logits.append(get_scores(model, model.transformer.h[i].output[0]).save())
                 overall_hs.append(model.transformer.h[i].output[0].save())
+        
     
     output = init_logits[-1]
 
     first_set_logits = [curr_hs for curr_hs in init_logits]
     hs = [curr_hs for curr_hs in overall_hs]
     first_set_logits = torch.stack(first_set_logits)
-    counter = 0
-    future_outputs = []
-    future_preds = []
-    for curr_hs in hs:
-        curr_future_outputs = []
-        curr_future_preds = []
-        for x in range(0, curr_hs.shape[1]):
-            sub_hs = curr_hs[:,x,:].unsqueeze(0)
-            future_output_logits = list()
-            with model.generate(max_new_tokens=num_toks_gen, pad_token_id=50256, remote=remote) as generator:
-                with generator.invoke("_ _ _ _ _ _ _ _ _ _") as invoker:
-                    with generator.iter[:] as idx:
-                        if idx == 0:
-                            model.transformer.wte.output = context.unsqueeze(0)
-                            model.transformer.h[tgt_in_layer].output[0][:,context_pos,:] = sub_hs
-                        else:
-                            future_output_logits.append(model.lm_head.output.save())
-            future_output_logits = torch.cat(future_output_logits, dim=1)
-            curr_output = torch.squeeze(future_output_logits,0)
-            #shape of curr output
-            curr_fav_tok_pred, curr_fav_tok = get_prob_tokens(curr_output, topk=1)
-            curr_future_outputs.append(tok.batch_decode(curr_fav_tok))
-            curr_future_preds.append(curr_fav_tok_pred.flatten().cpu().numpy())
-            
-        future_outputs.append(curr_future_outputs)
-        future_preds.append(curr_future_preds)
+    with model.session(remote=remote):
+        counter = 0
+        future_tokens = []
+        future_preds = []
+        for curr_hs in hs:
+            curr_future_tokens = []
+            curr_future_preds = []
+            for x in range(0, curr_hs.shape[1]):
+                sub_hs = curr_hs[:,x,:].unsqueeze(0)
+                future_output_logits = list()
+                with model.generate(max_new_tokens=num_toks_gen, pad_token_id=50256) as generator:
+                    with generator.invoke("_ _ _ _ _ _ _ _ _ _") as invoker:
+                        with generator.iter[:] as idx:
+                            if idx == 0:
+                                model.transformer.wte.output = context.unsqueeze(0).to(model.transformer.wte.output.device)
+                                model.transformer.h[tgt_in_layer].output[0][:,context_pos,:] = sub_hs.to(model.transformer.h[tgt_in_layer].output[0].device)
+                            else:
+                                future_output_logits.append(model.lm_head.output.save())
+                future_output_logits = torch.cat(future_output_logits, dim=1)
+                curr_output = torch.squeeze(future_output_logits,0)
+                #shape of curr output
+                curr_fav_tok_pred, curr_fav_tok = get_prob_tokens(curr_output, topk=1)
+                curr_future_tokens.append(curr_fav_tok)
+                curr_future_preds.append(curr_fav_tok_pred.flatten().cpu().numpy())
+
+            future_tokens.append(curr_future_tokens)
+            future_preds.append(curr_future_preds)
+
+        future_tokens.save()
+        future_preds.save()
+
+    future_outputs = [[model.tokenizer.batch_decode(token) for token in tokens_list] for tokens_list in future_tokens]
+
     # The full decoder head normalizes hidden state and applies softmax at the end.
     favorite_probs, favorite_tokens = get_prob_tokens(first_set_logits, topk=topk)
     
