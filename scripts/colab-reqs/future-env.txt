@@ -9,7 +9,7 @@ asttokens==3.0.0
 async-lru==2.0.5
 attrs==25.4.0
 babel==2.17.0
-git+https://github.com/davidbau/baukit
+baukit @ git+https://github.com/davidbau/baukit@5e23007c02fd58f063200c5dc9033e90f092630d
 beautifulsoup4==4.14.2
 bidict==0.23.1
 bleach==6.2.0
