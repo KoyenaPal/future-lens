@@ -34,7 +34,7 @@ demo/FutureLensDemonstration.ipynb
 ```
 ## Updates
 
-### Oct.24th 2023
+### Oct.24th 2025
 Updated Future Lens Demo folder with the latest NNsight version (0.5.9).
 
 ### Oct.6th 2023
