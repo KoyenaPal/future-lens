@@ -20,7 +20,6 @@ def show_future_lens(model, tok, prefix, context, in_layer = 13, tgt_in_layer = 
     
     context = context.detach()
     num_layers = len(model.transformer.h)
-    # with model.generate(max_new_tokens=num_toks_gen, pad_token_id=50256, remote=remote) as generator:
     with model.trace(max_new_tokens=num_toks_gen, pad_token_id=50256, remote=remote) as tracer:
         overall_hs = list().save()
         init_logits = list().save()
